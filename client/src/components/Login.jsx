@@ -25,8 +25,8 @@ const Login = () => {
             if(!response.ok) {
                 throw new Error('Network response was not ok.');
             }
-            const data = await response.json();
-            return data;
+            const userDataResponse = await response.json();
+            setUserData(userDataResponse);
         } catch (error) {
             throw new Error('Login failed');
         }
@@ -38,6 +38,9 @@ const Login = () => {
             const response = await loginUser(username, password);
 
             localStorage.setItem('token', response.token);
+
+            setIsLoggedIn(true);
+
             console.log('Login successful! Token stored in localStorage.');
         } catch (error) {
             console.error('Login failed', error.message);

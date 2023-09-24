@@ -3,6 +3,8 @@ import React, {useState} from 'react';
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const [userData, setUserData] = useState(null);
 
     const handleUsernameChange = (event) => {
         setUsername(event.target.value);
@@ -44,20 +46,39 @@ const Login = () => {
 
   return (
    <React.Fragment>
-        <h2>Login</h2>
-        <form onSubmit={handleSubmit}>
-            <label>
-                Username:
-                <input type="text" value={username} onChange={handleUsernameChange}/>
-            </label>
-            <br />
-            <label>
-                Password:
-                <input type="password" value={password} onChange={handlePasswordChange} />
-            </label>
-            <br />
-            <button type="submit">Login</button>  
-        </form>
+    <div>
+        {isLoggedIn ? (
+            <div>
+                <h2>User Data</h2>
+                {userData ? (
+                    <div>
+                        <p>Name: {userData.name}</p>
+                        <p>Email: {userData.email}</p>
+                    </div>
+                ) : (
+                    <p>Loading user data...</p>
+                )}
+            </div>
+        ) : (
+            <div>
+            <h2>Login</h2>
+            <form onSubmit={handleSubmit}>
+                <label>
+                    Username:
+                    <input type="text" value={username} onChange={handleUsernameChange}/>
+                </label>
+                <br />
+                <label>
+                    Password:
+                    <input type="password" value={password} onChange={handlePasswordChange} />
+                </label>
+                <br />
+                <button type="submit">Login</button>  
+            </form>
+            </div>
+        )}
+    </div> 
+        
    </React.Fragment>
   )
 }

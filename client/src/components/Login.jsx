@@ -21,7 +21,7 @@ const Login = () => {
             body: JSON.stringify({username, password})
         };
         try {
-            const response = await fetch('api/login', requestOptions);
+            const response = await fetch('/api/login', requestOptions);
             if(!response.ok) {
                 throw new Error('Network response was not ok.');
             }
@@ -52,11 +52,10 @@ const Login = () => {
     <div>
         {isLoggedIn ? (
             <div>
-                <h2>User Data</h2>
                 {userData ? (
                     <div>
-                        <p>Name: {userData.name}</p>
-                        <p>Email: {userData.email}</p>
+                        <p>Username: {userData.username}</p>
+                        <p>Password: {userData.password}</p>
                     </div>
                 ) : (
                     <p>Loading user data...</p>

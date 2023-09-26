@@ -1,6 +1,7 @@
-import express from 'express';
-import * as dotenv from 'dotenv';
-import cors from 'cors';
+const express = require('express');
+const dotenv =  require('dotenv');
+const mongoose = require('mongoose');
+const cors = require('cors');
 
 //configure my .env file for use
 dotenv.config();
@@ -13,6 +14,15 @@ app.use(express.json({limit: '50mb'}));
 //call the jwt token and create a variable for the incoming .env secretKey 
 const jwt = require('jsonwebtoken');
 const secretKey = process.env.SECRET_KEY;
+
+//MongoDB connection string
+const mongoURI = process.env.MONGO_URI;
+
+mongoose.connect(mongoURI, {useNewUrlParser: true, useUnifiedTopology: true});
+
+mongoose.connection.on('connected', ()  => {
+    console.log('Connected to MongoDB!');
+});
 
 app.post('/api/login', (req, res) => {
     //req.body contains user credentials
@@ -38,7 +48,9 @@ app.post('/api/login', (req, res) => {
 //start server and connect it to port 8080
 const startServer = async () => {
     try {
-        app.listen(8080, () => console.log('Server has started on port http://localhost:8080'));
+        const PORT = process.env.PORT || 8080;
+
+        app.listen(PORT, () => console.log(`Server has started on port ${PORT}`));
     } 
     //error call for if server does not start
     catch (error) {

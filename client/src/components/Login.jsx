@@ -4,7 +4,6 @@ const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isLoggedIn, setIsLoggedIn] = useState(false);
-    const [userData, setUserData] = useState(null);
 
     const handleUsernameChange = (event) => {
         setUsername(event.target.value);
@@ -14,55 +13,36 @@ const Login = () => {
         setPassword(event.target.value);
     };
 
-    const loginUser = async(username, password) => {
-        const requestOptions = {
-            method: 'POST',
-            headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({username, password})
-        };
-        try {
-            const response = await fetch('/api/login', requestOptions);
-            if(!response.ok) {
-                throw new Error('Network response was not ok.');
-            }
-            const userDataResponse = await response.json();
-            setUserData(userDataResponse);
-        } catch (error) {
-            throw new Error('Login failed');
-        }
-    }
+   
 
     const handleSubmit = async(event) => {
         event.preventDefault();
+        
         try {
-            const response = await loginUser(username, password);
+            const response = await fetch ('http://localhost:8080/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({username, password})
+                    
+            });
+            if (response.ok) {
+                setIsLoggedIn(true);
+                console.log('Login successful!');
+            } else {
+                const errorData = await response.json();
+                throw new Error(errorData.message);
+            }
 
-            localStorage.setItem('token', response.token);
-
-            setIsLoggedIn(true);
-
-            console.log('Login successful! Token stored in localStorage.');
         } catch (error) {
-            console.error('Login failed', error.message);
+            console.log('Login failed!:', error.message)
         }
     };
 
   return (
    <React.Fragment>
-    <div>
-        {isLoggedIn ? (
-            <div>
-                {userData ? (
-                    <div>
-                        <p>Username: {userData.username}</p>
-                        <p>Password: {userData.password}</p>
-                    </div>
-                ) : (
-                    <p>Loading user data...</p>
-                )}
-            </div>
-        ) : (
-            <div>
+        <div>
             <h2>Login</h2>
             <form onSubmit={handleSubmit}>
                 <label>
@@ -77,9 +57,8 @@ const Login = () => {
                 <br />
                 <button type="submit">Login</button>  
             </form>
-            </div>
-        )}
-    </div> 
+            {isLoggedIn && <p>You are logged in!</p>}
+        </div>
         
    </React.Fragment>
   )

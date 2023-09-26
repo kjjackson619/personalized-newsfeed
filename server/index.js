@@ -45,6 +45,17 @@ app.post('/api/login', (req, res) => {
     res.json({token});
 });
 
+
+app.post('/api/signup', async (req, res) => {
+    const {username, password} = req.body;
+
+    if(!username || !password) {
+        return res.status(400).json({message: 'Username and password are required!'});
+    }
+    //Respond with a success message or appropriate response
+    res.json({message: 'User signed up successfully.'});
+})
+
 //start server and connect it to port 8080
 const startServer = async () => {
     try {

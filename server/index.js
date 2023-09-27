@@ -24,6 +24,10 @@ mongoose.connection.on('connected', ()  => {
     console.log('Connected to MongoDB!');
 });
 
+const checkCredentials = (username, password) => {
+    return true
+};
+
 app.post('/api/login', (req, res) => {
     //req.body contains user credentials
     const {username, password } = req.body;

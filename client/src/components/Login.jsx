@@ -29,6 +29,11 @@ const Login = () => {
             });
             if (response.ok) {
                 setIsLoggedIn(true);
+                const responseData = await response.json();
+                const token = responseData.token;
+
+                localStorage.setItem('token', token);
+                
                 console.log('Login successful!');
             } else {
                 const errorData = await response.json();
